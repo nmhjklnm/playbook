@@ -11,13 +11,13 @@ Allow non-interactive sudo usage (so an AI agent can run sudo for longer without
 ## Change
 - File: `/etc/sudoers.d/<user>-timestamp`
 - Content:
-  - `Defaults:<user> timestamp_timeout=240`
+  - `Defaults:<user> timestamp_timeout=240, !tty_tickets`
 - Permissions:
   - `0440`
 
 ## Apply
 1) `sudo visudo -f /etc/sudoers.d/<user>-timestamp`
-2) Add line: `Defaults:<user> timestamp_timeout=240`
+2) Add line: `Defaults:<user> timestamp_timeout=240, !tty_tickets`
 3) `sudo chmod 0440 /etc/sudoers.d/<user>-timestamp`
 
 ## Verify
@@ -26,6 +26,7 @@ Allow non-interactive sudo usage (so an AI agent can run sudo for longer without
 - `sudo -n true && echo OK || echo NEED_PASSWORD`  (expect NEED_PASSWORD)
 - `sudo -v` (enter password once)
 - `sudo -n true && echo OK || echo NEED_PASSWORD`  (expect OK)
+- For non-interactive sudo across terminals/sessions, include `!tty_tickets`.
 
 ## Rollback
 - `sudo rm /etc/sudoers.d/<user>-timestamp`
